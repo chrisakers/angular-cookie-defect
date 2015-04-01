@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="defectApp" ng-init="">
+<head>
+    <meta charset="utf-8">
+    <title>Angular Cookie Duplication Defect</title>
+    <style>
+        #addcookie {width: 500px;}
+    </style>
+</head>
+<body ng-controller="MainCtrl">
+<div>
+    Add a cookie (vanilla JS):
+    <input id=addcookie value="jscookie=test1; domain=.domain.com; expires=Thu, 31 Dec 2015 23:59:59 GMT;" />
+    <button id=vjsc onclick="document.cookie = document.querySelector('#addcookie').value;">Add Vanilla Cookie</button>
+</div>
+
+<div>
+    Add a cookie ($cookies service):
+    <input ng-model=add$cookiename value="myangularcookie"/>
+    <input ng-model=add$cookievalue value="test2"/>
+    <button id=ajsc ng-click="cookies[add$cookiename] = add$cookievalue;">Add Angular Cookie</button>
+</div>
+
+<div>
+    <button onclick="vjsc.click(); ajsc.click();">Add Both Cookies</button>
+</div>
+
+<div>
+    <h3>Browser Cookies (as reported in $cookies service)</h3>
+    <div class=cookielist ng-repeat="(key, value) in cookies"><b>{{key}}</b>:{{value}}</div>
+</div>
+
+    <script src="/bower_components/angular/angular.js"></script>
+    <script src="/bower_components/angular-cookies/angular-cookies.js"></script>
+    <script>
+        var app = angular.module('defectApp', ['ngCookies']);
+        app.controller('MainCtrl', function ($scope, $cookies) {
+            $scope.cookies = $cookies;
+            $scope.add$cookiename = 'angcookie';
+            $scope.add$cookievalue = 'test2';
+        });
+    </script>
+</body>
+</html>
